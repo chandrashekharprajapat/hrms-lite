@@ -1,0 +1,53 @@
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--spacing-xl);
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+}
+
+.search-bar {
+    margin-bottom: var(--spacing-lg);
+}
+
+.search-bar .form-input {
+    max-width: 500px;
+}
+
+.department-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+}
+
+.btn-delete {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 1.25rem;
+    padding: 0.5rem;
+    transition: transform var(--transition-base);
+}
+
+.btn-delete:hover {
+    transform: scale(1.2);
+}
+
+@media (max-width: 768px) {
+    .page-header {
+        flex-direction: column;
+    }
+
+    .page-header .btn {
+        width: 100%;
+    }
+
+    .search-bar .form-input {
+        max-width: 100%;
+    }
+}

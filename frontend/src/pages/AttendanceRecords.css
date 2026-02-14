@@ -1,0 +1,41 @@
+.filters {
+    display: flex;
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+    align-items: flex-end;
+    flex-wrap: wrap;
+}
+
+.filter-group {
+    flex: 1;
+    min-width: 200px;
+}
+
+.filter-group .form-label {
+    margin-bottom: var(--spacing-xs);
+}
+
+.clear-filters {
+    white-space: nowrap;
+}
+
+.records-summary {
+    margin-top: var(--spacing-lg);
+    text-align: center;
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--border-color);
+}
+
+@media (max-width: 768px) {
+    .filters {
+        flex-direction: column;
+    }
+
+    .filter-group {
+        width: 100%;
+    }
+
+    .clear-filters {
+        width: 100%;
+    }
+}
