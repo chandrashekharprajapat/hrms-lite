@@ -65,7 +65,10 @@ const Dashboard = () => {
 
                 <div
                     className="stat-card stat-success clickable"
-                    onClick={() => navigate('/attendance?status=Present')}
+                    onClick={() => {
+                        const today = new Date().toISOString().split('T')[0];
+                        navigate(`/attendance?status=Present&date=${today}`);
+                    }}
                     style={{ cursor: 'pointer' }}
                 >
                     <div className="stat-icon">✅</div>
@@ -77,7 +80,10 @@ const Dashboard = () => {
 
                 <div
                     className="stat-card stat-danger clickable"
-                    onClick={() => navigate('/attendance?status=Absent')}
+                    onClick={() => {
+                        const today = new Date().toISOString().split('T')[0];
+                        navigate(`/attendance?status=Absent&date=${today}`);
+                    }}
                     style={{ cursor: 'pointer' }}
                 >
                     <div className="stat-icon">❌</div>

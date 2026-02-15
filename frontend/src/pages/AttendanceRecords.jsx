@@ -12,7 +12,7 @@ const AttendanceRecords = () => {
     const [employees, setEmployees] = useState({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [dateFilter, setDateFilter] = useState('');
+    const [dateFilter, setDateFilter] = useState(searchParams.get('date') || '');
     const [employeeFilter, setEmployeeFilter] = useState(searchParams.get('employee') || '');
     const [statusFilter, setStatusFilter] = useState(searchParams.get('status') || '');
 
