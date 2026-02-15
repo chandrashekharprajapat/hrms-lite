@@ -17,12 +17,20 @@
 
 .department-badge {
     display: inline-block;
-    padding: 0.25rem 0.75rem;
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
+    padding: 0.35rem 1rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
     border-radius: 20px;
     font-size: var(--font-size-sm);
-    font-weight: 500;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.25);
+    transition: all var(--transition-base);
+}
+
+.department-badge:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.35);
 }
 
 .clickable-row {
