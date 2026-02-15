@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, Field, model_validator
+from pydantic import BaseModel, EmailStr, Field, validator
 from datetime import date
 
 class EmployeeCreate(BaseModel):
@@ -12,13 +12,19 @@ class EmployeeResponse(BaseModel):
     full_name: str
     email: str
     department: str
+    
+    class Config:
+        orm_mode = True
 
 class AttendanceCreate(BaseModel):
     employee_id: str = Field(..., min_length=1)
     date: date
-    status: str = Field(..., pattern="^(Present|Absent)$")
+    status: str = Field(..., regex="^(Present|Absent)$")
 
 class AttendanceResponse(BaseModel):
     employee_id: str
     date: date
     status: str
+    
+    class Config:
+        orm_mode = True
