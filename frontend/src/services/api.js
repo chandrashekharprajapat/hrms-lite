@@ -26,6 +26,9 @@ export const attendanceAPI = {
     },
     getByEmployeeId: (employeeId) => api.get(`/attendance/employee/${employeeId}`),
     mark: (data) => api.post('/attendance', data),
+    update: (employeeId, date, data) => api.put(`/attendance/${employeeId}/${date}`, data),
+    delete: (employeeId, date) => api.delete(`/attendance/${employeeId}/${date}`),
+    bulkDelete: (records) => api.post('/attendance/bulk-delete', records),
 };
 
 export default api;

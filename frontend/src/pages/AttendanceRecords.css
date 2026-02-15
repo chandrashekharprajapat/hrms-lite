@@ -26,6 +26,38 @@
     border-top: 1px solid var(--border-color);
 }
 
+.btn-edit {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 1.25rem;
+    padding: 0.5rem;
+    transition: transform var(--transition-base);
+}
+
+.btn-edit:hover {
+    transform: scale(1.2);
+}
+
+.table input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: var(--primary-color);
+}
+
+.department-badge {
+    display: inline-block;
+    padding: 0.35rem 1rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.25);
+}
+
 @media (max-width: 768px) {
     .filters {
         flex-direction: column;
@@ -36,6 +68,14 @@
     }
 
     .clear-filters {
+        width: 100%;
+    }
+
+    .page-header {
+        flex-direction: column;
+    }
+
+    .page-header>div {
         width: 100%;
     }
 }

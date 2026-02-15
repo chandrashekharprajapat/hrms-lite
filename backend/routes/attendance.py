@@ -90,3 +90,65 @@ async def get_employee_attendance(employee_id: str):
         )
         for rec in records
     ]
+
+@router.put("/{employee_id}/{attendance_date}", response_model=AttendanceResponse)
+async def update_attendance(employee_id: str, attendance_date: str, attendance: AttendanceCreate):
+    """Update an existing attendance record"""
+    db = db_instance.get_db()
+    
+    # Verify employee exists
+    employee = await db.employees.find_one({"employee_id": employee_id})
+    if not employee:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Employee with ID '{employee_id}' not found"
+        )
+    
+    # Find and update the attendance record
+    result = await db.attendance.update_one(
+        {"employee_id": employee_id, "date": attendance_date},
+        {"$set": {"status": attendance.status}}
+    )
+    
+    if result.matched_count == 0:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Attendance record not found for employee '{employee_id}' on date '{attendance_date}'"
+        )
+    
+    return AttendanceResponse(
+        employee_id=employee_id,
+        date=date.fromisoformat(attendance_date),
+        status=attendance.status
+    )
+
+@router.delete("/{employee_id}/{attendance_date}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_attendance(employee_id: str, attendance_date: str):
+    """Delete a specific attendance record"""
+    db = db_instance.get_db()
+    
+    result = await db.attendance.delete_one({
+        "employee_id": employee_id,
+        "date": attendance_date
+    })
+    
+    if result.deleted_count == 0:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Attendance record not found for employee '{employee_id}' on date '{attendance_date}'"
+        )
+    
+    return None
+
+@router.post("/bulk-delete", status_code=status.HTTP_204_NO_CONTENT)
+async def bulk_delete_attendance(records: List[dict]):
+    """Delete multiple attendance records"""
+    db = db_instance.get_db()
+    
+    for record in records:
+        await db.attendance.delete_one({
+            "employee_id": record["employee_id"],
+            "date": record["date"]
+        })
+    
+    return None
