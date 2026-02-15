@@ -1,293 +1,202 @@
-# HRMS Lite - Lightweight Human Resource Management System
+# HRMS - Human Resource Management System
 
-A modern, full-stack web application for managing employee records and tracking daily attendance. Built with FastAPI, MongoDB, and React.
+A modern, lightweight HR management system built with FastAPI and React. Streamline employee management and attendance tracking with an intuitive interface and powerful features.
 
-## 🚀 Live Demo
-
-- **Frontend**: [Deployed on Vercel - To be added after deployment]
-- **Backend API**: [Deployed on Render - To be added after deployment]
-- **API Documentation**: [Backend URL]/docs (FastAPI auto-generated Swagger UI)
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![Python](https://img.shields.io/badge/python-3.11-blue.svg)
+![React](https://img.shields.io/badge/react-18.2-blue.svg)
 
 ## ✨ Features
 
-### Employee Management
-- ➕ Add new employees with validation
-- 📋 View all employees in a searchable table
-- 🗑️ Delete employees (with cascade deletion of attendance records)
-- 🔍 Search by name, ID, email, or department
-- ✅ Duplicate employee ID and email prevention
+### 👥 Employee Management
+- **Add & Manage Employees** - Create employee profiles with ID, name, email, and department
+- **Smart Search** - Search employees by name, ID, department, or email
+- **Bulk Delete** - Select multiple employees and delete them at once with checkboxes
+- **Cascade Delete** - Automatically removes all attendance records when an employee is deleted
+- **Department Badges** - Visual gradient badges for easy department identification
+- **Quick Navigation** - Click on any employee to view their attendance history
 
-### Attendance Management
-- 📝 Mark daily attendance (Present/Absent)
-- 📊 View attendance records with filtering
-- 📅 Filter by date
-- 👤 Filter by employee
-- 🔄 Update attendance if already marked for a date
+### 📊 Attendance Tracking
+- **Mark Attendance** - Record daily attendance (Present/Absent) for employees
+- **Edit Records** - Fix mistakes by editing attendance status with a simple modal
+- **Advanced Filtering** - Filter by date, employee, and status (Present/Absent)
+- **URL Parameters** - Share filtered views with persistent URL parameters
+- **Real-time Stats** - Dashboard shows today's present/absent counts
+- **Clickable Stats** - Click dashboard cards to view filtered attendance records
 
-### User Experience
-- 🎨 Modern, premium dark theme with glassmorphism
-- 🌈 Gradient accents and smooth animations
-- 📱 Fully responsive design
-- ⚡ Real-time validation and error handling
-- 🔄 Loading, empty, and error states
-- 📈 Dashboard with live statistics
+### 🎨 Modern UI/UX
+- **Light/Dark Theme** - Toggle between light and dark modes with preference saved
+- **Gradient Header** - Beautiful purple gradient header in light mode
+- **Responsive Design** - Works seamlessly on desktop, tablet, and mobile
+- **Loading States** - Smooth loading spinners and error handling
+- **Empty States** - Helpful messages when no data is available
+- **Smooth Animations** - Fade-in effects and hover transitions
 
-## 🛠️ Tech Stack
+## � Tech Stack
 
 ### Backend
-- **Framework**: FastAPI 0.109.0
-- **Database**: MongoDB (Motor async driver)
-- **Validation**: Pydantic v2
-- **Server**: Uvicorn with ASGI
+- **FastAPI** - Modern Python web framework
+- **MongoDB** - NoSQL database with Motor async driver
+- **Pydantic** - Data validation and settings management
+- **Uvicorn** - ASGI server for production
 
 ### Frontend
-- **Framework**: React 18
-- **Build Tool**: Vite 5
-- **Routing**: React Router v6
-- **HTTP Client**: Axios
-- **Styling**: Vanilla CSS with modern design system
+- **React 18** - UI library with hooks
+- **React Router** - Client-side routing
+- **Axios** - HTTP client for API calls
+- **Vite** - Fast build tool and dev server
+- **CSS Variables** - Theme system with light/dark modes
 
-### Deployment
-- **Frontend**: Vercel
-- **Backend**: Render
-- **Database**: MongoDB Atlas (recommended for production)
+## � Installation
 
-## 📦 Project Structure
+### Prerequisites
+- Python 3.11+
+- Node.js 18+
+- MongoDB (local or Atlas)
+
+### Backend Setup
+
+```bash
+# Navigate to backend directory
+cd backend
+
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Create .env file
+echo "MONGODB_URL=mongodb://localhost:27017" > .env
+
+# Run the server
+uvicorn main:app --reload --port 8000
+```
+
+### Frontend Setup
+
+```bash
+# Navigate to frontend directory
+cd frontend
+
+# Install dependencies
+npm install
+
+# Run development server
+npm run dev
+```
+
+The application will be available at:
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:8000
+- API Docs: http://localhost:8000/docs
+
+## � Usage
+
+### Managing Employees
+
+1. **Add Employee** - Click "Add Employee" button and fill in the form
+2. **Search** - Use the search box to filter employees
+3. **Bulk Delete** - Check employees and click "Delete Selected"
+4. **View Attendance** - Click on any employee row or the 📊 button
+
+### Tracking Attendance
+
+1. **Mark Attendance** - Click "Mark Attendance" and select employee, date, and status
+2. **Edit Record** - Click the ✏️ button on any attendance record
+3. **Filter Records** - Use date, employee, and status filters
+4. **Dashboard Stats** - Click "Present Today" or "Absent Today" cards for filtered view
+
+### Theme Switching
+
+- Click the 🌙/☀️ button in the header to toggle between light and dark themes
+- Your preference is automatically saved in browser storage
+
+## 🏗️ Project Structure
 
 ```
 my_project/
 ├── backend/
+│   ├── main.py              # FastAPI application
+│   ├── models.py            # Pydantic models
+│   ├── database.py          # MongoDB connection
 │   ├── routes/
-│   │   ├── employees.py      # Employee API endpoints
-│   │   └── attendance.py     # Attendance API endpoints
-│   ├── main.py               # FastAPI application
-│   ├── database.py           # MongoDB connection
-│   ├── models.py             # Pydantic models
-│   ├── requirements.txt      # Python dependencies
-│   ├── Procfile             # Render deployment config
-│   └── .env.example         # Environment variables template
-│
+│   │   ├── employees.py     # Employee endpoints
+│   │   └── attendance.py    # Attendance endpoints
+│   └── requirements.txt     # Python dependencies
 ├── frontend/
 │   ├── src/
 │   │   ├── components/      # Reusable components
 │   │   ├── pages/           # Page components
-│   │   ├── services/        # API service layer
-│   │   ├── App.jsx          # Main app component
-│   │   ├── main.jsx         # Entry point
-│   │   └── index.css        # Global styles & design system
-│   ├── package.json
-│   ├── vite.config.js
-│   ├── vercel.json          # Vercel deployment config
-│   └── .env.example         # Environment variables template
-│
-├── .gitignore
+│   │   ├── services/        # API service
+│   │   └── index.css        # Global styles & themes
+│   ├── package.json         # Node dependencies
+│   └── vite.config.js       # Vite configuration
 └── README.md
 ```
 
-## 🚀 Local Development Setup
-
-### Prerequisites
-- Python 3.9+
-- Node.js 18+
-- MongoDB (local installation or MongoDB Atlas account)
-
-### Backend Setup
-
-1. **Navigate to backend directory**
-   ```bash
-   cd backend
-   ```
-
-2. **Create virtual environment**
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
-
-3. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. **Set up environment variables**
-   ```bash
-   cp .env.example .env
-   ```
-   
-   Edit `.env` and set your MongoDB connection string:
-   ```
-   MONGODB_URL=mongodb://localhost:27017
-   # Or for MongoDB Atlas:
-   # MONGODB_URL=mongodb+srv://username:password@cluster.mongodb.net/hrms_lite
-   ```
-
-5. **Run the backend server**
-   ```bash
-   uvicorn main:app --reload --port 8000
-   ```
-   
-   Backend will be available at: `http://localhost:8000`
-   API docs at: `http://localhost:8000/docs`
-
-### Frontend Setup
-
-1. **Navigate to frontend directory**
-   ```bash
-   cd frontend
-   ```
-
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Run the development server**
-   ```bash
-   npm run dev
-   ```
-   
-   Frontend will be available at: `http://localhost:3000`
-
-The frontend is configured to proxy API requests to `http://localhost:8000` during development.
-
 ## 🌐 Deployment
 
-### Backend Deployment (Render)
+See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed deployment instructions for:
+- Backend: Render
+- Frontend: Vercel
+- Database: MongoDB Atlas
 
-1. **Create a new Web Service on Render**
-2. **Connect your GitHub repository**
-3. **Configure the service:**
-   - **Build Command**: `pip install -r requirements.txt`
-   - **Start Command**: `uvicorn main:app --host 0.0.0.0 --port $PORT`
-   - **Environment Variables**:
-     - `MONGODB_URL`: Your MongoDB Atlas connection string
+## 🔑 Environment Variables
 
-4. **Deploy** - Render will automatically deploy your backend
-
-### Frontend Deployment (Vercel)
-
-1. **Install Vercel CLI** (optional)
-   ```bash
-   npm install -g vercel
-   ```
-
-2. **Deploy from the frontend directory**
-   ```bash
-   cd frontend
-   vercel
-   ```
-
-3. **Set environment variable in Vercel dashboard:**
-   - `VITE_API_URL`: Your deployed backend URL (e.g., `https://your-app.onrender.com/api`)
-
-4. **Redeploy** after setting the environment variable
-
-Alternatively, connect your GitHub repository to Vercel for automatic deployments.
-
-## 📚 API Documentation
-
-### Employee Endpoints
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/employees` | Create a new employee |
-| GET | `/api/employees` | Get all employees |
-| GET | `/api/employees/{employee_id}` | Get employee by ID |
-| DELETE | `/api/employees/{employee_id}` | Delete employee |
-
-### Attendance Endpoints
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/attendance` | Mark attendance |
-| GET | `/api/attendance` | Get all attendance records |
-| GET | `/api/attendance?date_filter=YYYY-MM-DD` | Filter by date |
-| GET | `/api/attendance/employee/{employee_id}` | Get employee attendance |
-
-### Example Request (Create Employee)
-
-```bash
-curl -X POST "http://localhost:8000/api/employees" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "employee_id": "EMP001",
-    "full_name": "John Doe",
-    "email": "john.doe@company.com",
-    "department": "Engineering"
-  }'
+### Backend (.env)
+```
+MONGODB_URL=your_mongodb_connection_string
 ```
 
-## 🎨 Design Features
+### Frontend (Vercel)
+```
+VITE_API_URL=your_backend_url/api
+```
 
-- **Dark Theme**: Modern dark color scheme with high contrast
-- **Glassmorphism**: Frosted glass effect on cards
-- **Gradient Accents**: Vibrant purple-to-pink gradients
-- **Smooth Animations**: Hover effects, transitions, and micro-interactions
-- **Responsive**: Mobile-first design that works on all devices
-- **Typography**: Inter font family for clean, modern text
+## � API Endpoints
 
-## ✅ Validation & Error Handling
+### Employees
+- `GET /api/employees` - Get all employees
+- `GET /api/employees/{id}` - Get employee by ID
+- `POST /api/employees` - Create new employee
+- `DELETE /api/employees/{id}` - Delete employee (cascade deletes attendance)
 
-### Backend Validation
-- Required field validation
-- Email format validation
-- Duplicate employee ID/email prevention
-- Employee existence checks for attendance
-- Proper HTTP status codes (400, 404, 201, 204)
+### Attendance
+- `GET /api/attendance` - Get all attendance records
+- `GET /api/attendance/employee/{id}` - Get employee attendance
+- `POST /api/attendance` - Mark attendance
+- `PUT /api/attendance/{id}/{date}` - Update attendance record
+- `DELETE /api/attendance/{id}/{date}` - Delete attendance record
+- `POST /api/attendance/bulk-delete` - Bulk delete records
 
-### Frontend Validation
-- Client-side form validation
-- Real-time error feedback
-- API error display
-- Loading states during operations
-- Success confirmations
+## 🎨 Features Highlights
 
-## 🔒 Assumptions & Limitations
+### Recent Updates
+- ✅ Light/Dark theme switcher with localStorage persistence
+- ✅ Gradient header in light mode with white text
+- ✅ Department badges with gradient backgrounds
+- ✅ Edit attendance records functionality
+- ✅ Bulk delete employees with checkboxes
+- ✅ Cascade delete: attendance records deleted with employees
+- ✅ URL parameter support for filtered views
+- ✅ Clickable dashboard statistics
+- ✅ Improved confirmation modals with detailed warnings
 
-### Assumptions
-- Single admin user (no authentication required)
-- All times are in local timezone
-- Attendance can be updated if already marked for a date
+## � Contributing
 
-### Limitations
-- No user authentication/authorization
-- No role-based access control
-- No payroll or leave management
-- No attendance reports/analytics
-- No employee profile pictures
-- No bulk operations
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-### Future Enhancements
-- User authentication (JWT)
-- Role-based permissions
-- Attendance reports and analytics
-- Employee profile management
-- Leave management system
-- Payroll integration
-- Email notifications
-- Export to CSV/PDF
+## � License
 
-## 🧪 Testing
+This project is licensed under the MIT License.
 
-### Backend Testing
-Visit `http://localhost:8000/docs` for interactive API testing with Swagger UI.
+## � Acknowledgments
 
-### Frontend Testing
-1. Start both backend and frontend servers
-2. Test complete user flows:
-   - Add employees
-   - Mark attendance
-   - View and filter records
-   - Delete employees
-   - Test validation errors
-
-## 📝 License
-
-This project is created as a coding assignment and is free to use.
-
-## 👨‍💻 Developer
-
-Built with ❤️ for efficient HR management.
+- Built with FastAPI and React
+- Icons from Unicode Emoji
+- Styled with modern CSS gradients and animations
 
 ---
 
