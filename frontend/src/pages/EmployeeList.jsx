@@ -229,8 +229,8 @@ const EmployeeList = () => {
                                 </div>
                             ))}
                         </div>
-                        <p className="text-muted">
-                            ⚠️ This action cannot be undone. All attendance records for these employees will remain in the system.
+                        <p className="text-muted" style={{ color: 'var(--accent-color)', fontWeight: '500' }}>
+                            ⚠️ This action cannot be undone. All attendance records for {deleteModal.employees.length === 1 ? 'this employee' : 'these employees'} will also be permanently deleted.
                         </p>
                         <div className="modal-footer">
                             <button
