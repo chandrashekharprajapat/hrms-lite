@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { employeeAPI, attendanceAPI } from '../services/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ErrorMessage from '../components/ErrorMessage';
 import './Dashboard.css';
 
 const Dashboard = () => {
+    const navigate = useNavigate();
     const [stats, setStats] = useState({
         totalEmployees: 0,
         presentToday: 0,
@@ -54,15 +55,19 @@ const Dashboard = () => {
             </div>
 
             <div className="stats-grid">
-                <div className="stat-card stat-primary">
+                <Link to="/employees" className="stat-card stat-primary">
                     <div className="stat-icon">👥</div>
                     <div className="stat-content">
                         <h3 className="stat-value">{stats.totalEmployees}</h3>
                         <p className="stat-label">Total Employees</p>
                     </div>
-                </div>
+                </Link>
 
-                <div className="stat-card stat-success">
+                <div
+                    className="stat-card stat-success clickable"
+                    onClick={() => navigate('/attendance?status=Present')}
+                    style={{ cursor: 'pointer' }}
+                >
                     <div className="stat-icon">✅</div>
                     <div className="stat-content">
                         <h3 className="stat-value">{stats.presentToday}</h3>
@@ -70,7 +75,11 @@ const Dashboard = () => {
                     </div>
                 </div>
 
-                <div className="stat-card stat-danger">
+                <div
+                    className="stat-card stat-danger clickable"
+                    onClick={() => navigate('/attendance?status=Absent')}
+                    style={{ cursor: 'pointer' }}
+                >
                     <div className="stat-icon">❌</div>
                     <div className="stat-content">
                         <h3 className="stat-value">{stats.absentToday}</h3>

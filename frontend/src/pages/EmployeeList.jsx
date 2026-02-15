@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { employeeAPI } from '../services/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ErrorMessage from '../components/ErrorMessage';
@@ -7,6 +7,7 @@ import EmptyState from '../components/EmptyState';
 import './EmployeeList.css';
 
 const EmployeeList = () => {
+    const navigate = useNavigate();
     const [employees, setEmployees] = useState([]);
     const [filteredEmployees, setFilteredEmployees] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -122,14 +123,27 @@ const EmployeeList = () => {
                                 </thead>
                                 <tbody>
                                     {filteredEmployees.map((employee) => (
-                                        <tr key={employee.employee_id}>
+                                        <tr
+                                            key={employee.employee_id}
+                                            onClick={() => navigate(`/attendance?employee=${employee.employee_id}`)}
+                                            style={{ cursor: 'pointer' }}
+                                            className="clickable-row"
+                                        >
                                             <td><strong>{employee.employee_id}</strong></td>
                                             <td>{employee.full_name}</td>
                                             <td>{employee.email}</td>
                                             <td>
                                                 <span className="department-badge">{employee.department}</span>
                                             </td>
-                                            <td>
+                                            <td onClick={(e) => e.stopPropagation()}>
+                                                <button
+                                                    onClick={() => navigate(`/attendance?employee=${employee.employee_id}`)}
+                                                    className="btn-view"
+                                                    title="View attendance"
+                                                    style={{ marginRight: '8px' }}
+                                                >
+                                                    📊
+                                                </button>
                                                 <button
                                                     onClick={() => handleDeleteClick(employee)}
                                                     className="btn-delete"

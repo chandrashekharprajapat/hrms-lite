@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { attendanceAPI, employeeAPI } from '../services/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ErrorMessage from '../components/ErrorMessage';
@@ -7,12 +7,14 @@ import EmptyState from '../components/EmptyState';
 import './AttendanceRecords.css';
 
 const AttendanceRecords = () => {
+    const [searchParams] = useSearchParams();
     const [records, setRecords] = useState([]);
     const [employees, setEmployees] = useState({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [dateFilter, setDateFilter] = useState('');
-    const [employeeFilter, setEmployeeFilter] = useState('');
+    const [employeeFilter, setEmployeeFilter] = useState(searchParams.get('employee') || '');
+    const [statusFilter, setStatusFilter] = useState(searchParams.get('status') || '');
 
     const fetchData = async () => {
         try {
@@ -42,8 +44,9 @@ const AttendanceRecords = () => {
     }, [dateFilter]);
 
     const filteredRecords = records.filter(record => {
-        if (!employeeFilter) return true;
-        return record.employee_id === employeeFilter;
+        if (employeeFilter && record.employee_id !== employeeFilter) return false;
+        if (statusFilter && record.status !== statusFilter) return false;
+        return true;
     });
 
     const uniqueEmployeeIds = [...new Set(records.map(r => r.employee_id))];
@@ -109,11 +112,28 @@ const AttendanceRecords = () => {
                             </select>
                         </div>
 
-                        {(dateFilter || employeeFilter) && (
+                        <div className="filter-group">
+                            <label htmlFor="statusFilter" className="form-label">
+                                Filter by Status
+                            </label>
+                            <select
+                                id="statusFilter"
+                                className="form-select"
+                                value={statusFilter}
+                                onChange={(e) => setStatusFilter(e.target.value)}
+                            >
+                                <option value="">All Status</option>
+                                <option value="Present">✅ Present</option>
+                                <option value="Absent">❌ Absent</option>
+                            </select>
+                        </div>
+
+                        {(dateFilter || employeeFilter || statusFilter) && (
                             <button
                                 onClick={() => {
                                     setDateFilter('');
                                     setEmployeeFilter('');
+                                    setStatusFilter('');
                                 }}
                                 className="btn btn-secondary clear-filters"
                             >
