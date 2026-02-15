@@ -51,7 +51,7 @@ const Dashboard = () => {
         <div className="dashboard fade-in">
             <div className="dashboard-header">
                 <h1>Dashboard</h1>
-                <p className="text-muted">Welcome to HRMS Lite - Your HR Management Hub</p>
+                <p className="text-muted">Welcome to HRMS - Your HR Management Hub</p>
             </div>
 
             <div className="stats-grid">
