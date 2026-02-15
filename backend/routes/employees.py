@@ -56,7 +56,7 @@ async def get_employee(employee_id: str):
 
 @router.delete("/{employee_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_employee(employee_id: str):
-    """Delete an employee and their attendance records"""
+    """Delete an employee and all their attendance records"""
     db = db_instance.get_db()
     
     # Check if employee exists
