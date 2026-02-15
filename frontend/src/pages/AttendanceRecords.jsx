@@ -15,9 +15,7 @@ const AttendanceRecords = () => {
     const [dateFilter, setDateFilter] = useState(searchParams.get('date') || '');
     const [employeeFilter, setEmployeeFilter] = useState(searchParams.get('employee') || '');
     const [statusFilter, setStatusFilter] = useState(searchParams.get('status') || '');
-    const [selectedRecords, setSelectedRecords] = useState([]);
     const [editModal, setEditModal] = useState({ show: false, record: null });
-    const [deleteModal, setDeleteModal] = useState({ show: false, records: [] });
     const [processing, setProcessing] = useState(false);
 
     const fetchData = async () => {
@@ -45,7 +43,6 @@ const AttendanceRecords = () => {
 
     useEffect(() => {
         fetchData();
-        setSelectedRecords([]); // Clear selection when filters change
     }, [dateFilter]);
 
     const filteredRecords = records.filter(record => {
@@ -55,23 +52,6 @@ const AttendanceRecords = () => {
     });
 
     const uniqueEmployeeIds = [...new Set(records.map(r => r.employee_id))];
-
-    const handleSelectAll = (e) => {
-        if (e.target.checked) {
-            setSelectedRecords(filteredRecords.map(r => `${r.employee_id}-${r.date}`));
-        } else {
-            setSelectedRecords([]);
-        }
-    };
-
-    const handleSelectRecord = (record) => {
-        const key = `${record.employee_id}-${record.date}`;
-        if (selectedRecords.includes(key)) {
-            setSelectedRecords(selectedRecords.filter(k => k !== key));
-        } else {
-            setSelectedRecords([...selectedRecords, key]);
-        }
-    };
 
     const handleEditClick = (record) => {
         setEditModal({ show: true, record: { ...record } });
@@ -98,31 +78,6 @@ const AttendanceRecords = () => {
         }
     };
 
-    const handleDeleteSelected = () => {
-        const recordsToDelete = filteredRecords.filter(r =>
-            selectedRecords.includes(`${r.employee_id}-${r.date}`)
-        );
-        setDeleteModal({ show: true, records: recordsToDelete });
-    };
-
-    const handleDeleteConfirm = async () => {
-        try {
-            setProcessing(true);
-            const recordsData = deleteModal.records.map(r => ({
-                employee_id: r.employee_id,
-                date: r.date
-            }));
-            await attendanceAPI.bulkDelete(recordsData);
-            await fetchData();
-            setSelectedRecords([]);
-            setDeleteModal({ show: false, records: [] });
-        } catch (err) {
-            alert(err.response?.data?.detail || 'Failed to delete attendance records');
-        } finally {
-            setProcessing(false);
-        }
-    };
-
     if (loading) return <LoadingSpinner message="Loading attendance records..." />;
     if (error) return <ErrorMessage message={error} onRetry={fetchData} />;
 
@@ -133,16 +88,9 @@ const AttendanceRecords = () => {
                     <h1>Attendance Records</h1>
                     <p className="text-muted">View and manage employee attendance history</p>
                 </div>
-                <div style={{ display: 'flex', gap: '1rem' }}>
-                    {selectedRecords.length > 0 && (
-                        <button onClick={handleDeleteSelected} className="btn btn-danger">
-                            🗑️ Delete Selected ({selectedRecords.length})
-                        </button>
-                    )}
-                    <Link to="/attendance/mark" className="btn btn-primary">
-                        📝 Mark Attendance
-                    </Link>
-                </div>
+                <Link to="/attendance/mark" className="btn btn-primary">
+                    📝 Mark Attendance
+                </Link>
             </div>
 
             {records.length === 0 && !dateFilter ? (
@@ -232,13 +180,6 @@ const AttendanceRecords = () => {
                             <table className="table">
                                 <thead>
                                     <tr>
-                                        <th style={{ width: '50px' }}>
-                                            <input
-                                                type="checkbox"
-                                                checked={selectedRecords.length === filteredRecords.length && filteredRecords.length > 0}
-                                                onChange={handleSelectAll}
-                                            />
-                                        </th>
                                         <th>Date</th>
                                         <th>Employee ID</th>
                                         <th>Employee Name</th>
@@ -250,16 +191,8 @@ const AttendanceRecords = () => {
                                 <tbody>
                                     {filteredRecords.map((record, index) => {
                                         const employee = employees[record.employee_id];
-                                        const recordKey = `${record.employee_id}-${record.date}`;
                                         return (
                                             <tr key={`${record.employee_id}-${record.date}-${index}`}>
-                                                <td>
-                                                    <input
-                                                        type="checkbox"
-                                                        checked={selectedRecords.includes(recordKey)}
-                                                        onChange={() => handleSelectRecord(record)}
-                                                    />
-                                                </td>
                                                 <td>{new Date(record.date).toLocaleDateString('en-US', {
                                                     year: 'numeric',
                                                     month: 'short',
@@ -297,7 +230,6 @@ const AttendanceRecords = () => {
                     <div className="records-summary">
                         <p className="text-muted">
                             Showing {filteredRecords.length} of {records.length} records
-                            {selectedRecords.length > 0 && ` • ${selectedRecords.length} selected`}
                         </p>
                     </div>
                 </>
@@ -356,39 +288,6 @@ const AttendanceRecords = () => {
                                 disabled={processing}
                             >
                                 {processing ? 'Saving...' : 'Save Changes'}
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {/* Delete Confirmation Modal */}
-            {deleteModal.show && (
-                <div className="modal-overlay" onClick={() => setDeleteModal({ show: false, records: [] })}>
-                    <div className="modal" onClick={(e) => e.stopPropagation()}>
-                        <div className="modal-header">
-                            <h2>Confirm Deletion</h2>
-                        </div>
-                        <p>
-                            Are you sure you want to delete <strong>{deleteModal.records.length}</strong> attendance record(s)?
-                        </p>
-                        <p className="text-muted">
-                            This action cannot be undone.
-                        </p>
-                        <div className="modal-footer">
-                            <button
-                                onClick={() => setDeleteModal({ show: false, records: [] })}
-                                className="btn btn-secondary"
-                                disabled={processing}
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                onClick={handleDeleteConfirm}
-                                className="btn btn-danger"
-                                disabled={processing}
-                            >
-                                {processing ? 'Deleting...' : 'Delete Records'}
                             </button>
                         </div>
                     </div>
